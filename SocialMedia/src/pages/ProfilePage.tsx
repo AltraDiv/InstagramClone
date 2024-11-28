@@ -18,6 +18,7 @@ const ProfilePage: React.FC = () => {
 						<ProfilePosts />
 					</div>
 				</div>
+                
 			</div>
 		</div>
 	);

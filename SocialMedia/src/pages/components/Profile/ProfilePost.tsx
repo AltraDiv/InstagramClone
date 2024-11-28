@@ -1,8 +1,17 @@
 import React, { useState } from "react";
-
-const ProfilePost: React.FC<{ img: string }> = ({ img }) => {
+import { useTheme } from "../../../contexts/ThemeContext";
+import Comment from "../comment/Comment";
+import {
+	CommentLogo,
+	NotificationsLogo,
+	UnlikeLogo,
+} from "../../../assets/constants";
+const ProfilePost: React.FC<{ img: string; username: string }> = ({
+	img,
+	username,
+}) => {
 	const [isOpen, setIsOpen] = useState(false);
-
+	const { isDarkMode } = useTheme();
 	return (
 		<>
 			{/* Image Card */}
@@ -35,10 +44,25 @@ const ProfilePost: React.FC<{ img: string }> = ({ img }) => {
 						</div>
 
 						{/* Content Section */}
-						<div className="flex flex-col flex-1 bg-gray-900 text-white p-4">
+						<div
+							className={`flex flex-col flex-1  ${
+								isDarkMode
+									? "bg-black text-white"
+									: "bg-white text-black"
+							} p-4`}
+						>
 							{/* Header */}
 							<div className="flex justify-between items-center border-b border-gray-700 pb-2 mb-4">
-								<h3 className="font-semibold">meangrammer_</h3>
+								<div className="flex flex-row w-full">
+									<img
+										src="http://via.placeholder.com/150"
+										alt="Profile"
+										className="rounded-full w-8 h-8 object-cover"
+									/>
+									<h3 className="font-semibold ml-4">
+										{username}
+									</h3>
+								</div>
 								<button
 									onClick={() => setIsOpen(false)}
 									className="text-gray-400 hover:text-white"
@@ -62,30 +86,47 @@ const ProfilePost: React.FC<{ img: string }> = ({ img }) => {
 
 							{/* Comments Section */}
 							<div className="flex-1 overflow-y-auto space-y-4">
-								<div className="flex items-start space-x-3">
-									<span className="font-bold">
-										meangrammer_
-									</span>
-									<p>Dummy images from Unsplash</p>
-								</div>
-								<div className="flex items-start space-x-3">
-									<span className="font-bold">strainer</span>
-									<p>Nice pic</p>
-								</div>
-								<div className="flex items-start space-x-3">
-									<span className="font-bold">lamin444</span>
-									<p>Good clone dude!</p>
-								</div>
+								<Comment
+									createdat="21d"
+									username="user1"
+									text="hello"
+									profilepic="http://via.placeholder.com/150"
+								/>
+								<Comment
+									createdat="11d"
+									username="user3"
+									text="nice"
+									profilepic="http://via.placeholder.com/150"
+								/>
+								<Comment
+									createdat="4s"
+									username="user1442"
+									text="gj!"
+									profilepic="http://via.placeholder.com/150"
+								/>
 							</div>
-
 							{/* Likes & Input Section */}
 							<div className="border-t border-gray-700 pt-4">
-								<p className="text-sm mb-4">1000 likes</p>
+								<div className="flex flex-row space-x-4">
+									<div className="hover:text-neutral-500 cursor-pointer">
+										<NotificationsLogo />
+									</div>
+									<div className="hover:text-neutral-500 cursor-pointer">
+										<CommentLogo />
+									</div>
+								</div>
+								<p className="text-sm flex ml-auto mb-1">
+									1000 likes
+								</p>
 								<div className="flex items-center space-x-3">
 									<input
 										type="text"
 										placeholder="Add a comment..."
-										className="flex-1 bg-gray-800 text-white px-4 py-2 rounded-lg focus:outline-none"
+										className={`flex-1 ${
+											isDarkMode
+												? "bg-black text-white"
+												: "bg-white text-black"
+										} px-4 py-2 rounded-lg focus:outline-none`}
 									/>
 									<button className="text-blue-500 font-medium">
 										Post

@@ -22,10 +22,10 @@ const ProfilePosts:React.FC = () => {
 					))}
 				{!isLoading && (
 					<>
-						<ProfilePost img="/img1.png" />
-						<ProfilePost img="/img2.png" />
-						<ProfilePost img="/img3.png" />
-						<ProfilePost img="/img4.png" />
+						<ProfilePost img="/img1.png" username="bob" />
+						<ProfilePost img="/img2.png" username="bob" />
+						<ProfilePost img="/img3.png" username="bob" />
+						<ProfilePost img="/img4.png" username="bob" />
 					</>
 				)}
 			</div>
