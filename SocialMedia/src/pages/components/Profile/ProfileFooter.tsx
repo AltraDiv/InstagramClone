@@ -1,7 +1,6 @@
 import {
 	CommentLogo,
-	NotificationsLogo,
-	UnlikeLogo,
+	NotificationsLogo
 } from "../../../assets/constants";
 import { useTheme } from "../../../contexts/ThemeContext";
 
