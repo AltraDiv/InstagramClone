@@ -1,12 +1,9 @@
 import { Client, Databases, Account, Storage } from "appwrite";
-import dotenv from "dotenv";
-
-dotenv.config();
 
 const client = new Client();
 client
-	.setProject(process.env.PROJECT_ID!) 
-	.setEndpoint(process.env.ENDPOINT!);
+	.setEndpoint(import.meta.env.VITE_APPWRITE_ENDPOINT!)
+	.setProject(import.meta.env.VITE_APPWRITE_PROJECT_ID!);
 
 const databases = new Databases(client);
 const account = new Account(client);
