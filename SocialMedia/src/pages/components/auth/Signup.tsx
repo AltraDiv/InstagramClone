@@ -1,18 +1,35 @@
 import { account } from "../../../appwrite/appwriteConfig";
 import { useTheme } from "../../../contexts/ThemeContext";
 import { useState } from "react";
+import Toast from "../styles/Toast";
 
 const Signup: React.FC = () => {
-    const signupUser = async (
+	const [toast, setToast] = useState({
+		isVisible: false,
+		message: "",
+		type: "info",
+	});
+
+	const showToast = (message: string, type: "success" | "error" | "info") => {
+		setToast({ isVisible: true, message, type });
+		setTimeout(
+			() => setToast({ isVisible: false, message: "", type }),
+			3000
+		);
+	};
+
+	const signupUser = async (
 		username: string,
 		email: string,
 		password: string
 	) => {
 		try {
 			const session = await account.create(username, email, password);
-			console.log("User logged in:", session);
-		} catch (error) {
-			console.error("Login error:", error);
+			console.log("User Signed up:", session);
+			showToast("Signup successful!", "success");
+		} catch (error: any) {
+			console.error("Signup error:", error);
+            showToast(error.message || "An error occurred.", "error");
 		}
 	};
 
@@ -84,9 +101,9 @@ const Signup: React.FC = () => {
 						viewBox="0 0 24 24"
 						fill="none"
 						stroke="currentColor"
-						stroke-width="2"
-						stroke-linecap="round"
-						stroke-linejoin="round"
+						strokeWidth="2"
+						strokeLinecap="round"
+						strokeLinejoin="round"
 					>
 						{showPassword ? (
 							<>
@@ -104,12 +121,22 @@ const Signup: React.FC = () => {
 					</svg>
 				</button>
 			</div>
+
 			<button
+				onClick={() =>
+					signupUser(inputs.username, inputs.email, inputs.password)
+				}
 				type="button"
 				className="w-full p-1 bg-blue-500 text-white rounded-lg hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500"
 			>
 				Signup
 			</button>
+			<Toast
+				message={toast.message}
+				type={toast.type as "success" | "error" | "info"}
+				isVisible={toast.isVisible}
+				onClose={() => setToast({ ...toast, isVisible: false })}
+			/>
 		</>
 	);
 };
