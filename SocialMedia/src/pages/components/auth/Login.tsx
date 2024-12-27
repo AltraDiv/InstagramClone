@@ -1,9 +1,11 @@
 import { account } from "../../../appwrite/appwriteConfig";
 import { useTheme } from "../../../contexts/ThemeContext";
 import { useState } from "react";
+import { useNavigate } from "react-router";
 
 const Login: React.FC = () => {
-	// Hooks must be inside the component
+
+	const navigate = useNavigate();
 	const { isDarkMode } = useTheme();
 
 	const [inputs, setInputs] = useState({
@@ -18,6 +20,7 @@ const Login: React.FC = () => {
 				inputs.password
 			);
 			console.log("User logged in:", session);
+            navigate("/");
 		} catch (error) {
 			console.error("Password or Email Incorrect");
 		}

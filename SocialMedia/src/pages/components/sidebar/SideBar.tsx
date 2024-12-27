@@ -10,9 +10,17 @@ import { AiFillHome } from 'react-icons/ai';
 import { BiLogOut } from 'react-icons/bi';
 import { CreatePostLogo } from '../../../assets/constants';
 import { RxAvatar } from 'react-icons/rx';
+import { account } from "../../../appwrite/appwriteConfig"
+import { useNavigate } from "react-router-dom";
 
 const SideBar = () => {
 	const { isDarkMode, toggleDarkMode } = useTheme();
+	const navigate = useNavigate();
+	const logout = () => {
+		account.deleteSession("current");
+		navigate("/auth");
+	}
+
 	const sideBarItems = [
 		{
 			icon: <AiFillHome />,
@@ -105,6 +113,7 @@ const SideBar = () => {
 				<RouterLink
 					to="/auth"
 					className="flex items-center justify-center mb-2 hover:bg-gray-300 px-4 py-2 rounded"
+					onClick={() => logout()}
 				>
 					<div className="mr-2">
 						<BiLogOut />

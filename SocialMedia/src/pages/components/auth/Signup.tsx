@@ -1,9 +1,13 @@
 import { account } from "../../../appwrite/appwriteConfig";
+import { ID } from "appwrite";
 import { useTheme } from "../../../contexts/ThemeContext";
 import { useState } from "react";
 import Toast from "../styles/Toast";
+import { useNavigate } from "react-router";
 
 const Signup: React.FC = () => {
+    const navigate = useNavigate();
+
 	const [toast, setToast] = useState({
 		isVisible: false,
 		message: "",
@@ -21,15 +25,41 @@ const Signup: React.FC = () => {
 	const signupUser = async (
 		username: string,
 		email: string,
-		password: string
+		password: string,
+        fullname: string
 	) => {
 		try {
-			const session = await account.create(username, email, password);
+            showToast("Signup loading...", "success");
+            const userID = ID.unique();
+			// Create the user with unique email, password, and username
+            console.log("UserId: ", userID, "email", email, "password: ", password, "username:", username);
+			const session = await account.create(
+				userID,
+				email,
+				password,
+				username
+			);
 			console.log("User Signed up:", session);
-			showToast("Signup successful!", "success");
+
+			// Create session for the new user using email and password
+			const loginSession = await account.createEmailPasswordSession(
+				email,
+				password
+			);
+			console.log("Session Logged in:", loginSession);
+
+			await account.updatePrefs({
+				following: 0,
+				followers: 0,
+				bio: "",
+				theme: "dark",
+                fullname: fullname
+			});
+
+			navigate("/");
 		} catch (error: any) {
 			console.error("Signup error:", error);
-            showToast(error.message || "An error occurred.", "error");
+			showToast(error.message || "An error occurred.", "error");
 		}
 	};
 
@@ -41,6 +71,7 @@ const Signup: React.FC = () => {
 		username: "",
 		email: "",
 		password: "",
+        fullname: "",
 	});
 
 	return (
@@ -57,6 +88,21 @@ const Signup: React.FC = () => {
 					value={inputs.email}
 					onChange={(e) =>
 						setInputs({ ...inputs, email: e.target.value })
+					}
+				/>
+			</div>
+			{/* Full Name Field */}
+			<div>
+				<input
+					type="text"
+					id="fullname"
+					placeholder="Full Name"
+					className={`w-full p-1 border border-neutral-700 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 ${
+						isDarkMode ? "bg-black" : "bg-white"
+					}`}
+					value={inputs.fullname}
+					onChange={(e) =>
+						setInputs({ ...inputs, fullname: e.target.value })
 					}
 				/>
 			</div>
@@ -124,7 +170,12 @@ const Signup: React.FC = () => {
 
 			<button
 				onClick={() =>
-					signupUser(inputs.username, inputs.email, inputs.password)
+					signupUser(
+						inputs.username,
+						inputs.email,
+						inputs.password,
+						inputs.fullname
+					)
 				}
 				type="button"
 				className="w-full p-1 bg-blue-500 text-white rounded-lg hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500"
